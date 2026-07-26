@@ -1,0 +1,99 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id            String    @id @default(cuid())
+  name          String
+  email         String    @unique
+  password      String
+  role          String    @default("member")
+  teamId        String?
+  inviteId      String?
+  avatar        String?
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+  meetings      Meeting[] @relation("LeadMeetings")
+  assignedTasks Task[]    @relation("AssignedTasks")
+  createdTasks  Task[]    @relation("CreatedTasks")
+  invites       Invite[]  @relation("LeadInvites")
+  joinedViaInvite Invite? @relation("InviteUsers", fields: [inviteId], references: [id])
+  settings      Settings?
+}
+
+model Invite {
+  id        String    @id @default(cuid())
+  token     String    @unique
+  email     String?
+  leadId    String
+  lead      User      @relation("LeadInvites", fields: [leadId], references: [id])
+  used      Boolean   @default(false)
+  usedAt    DateTime?
+  expiresAt DateTime
+  createdAt DateTime  @default(now())
+  users     User[]    @relation("InviteUsers")
+}
+
+model Meeting {
+  id         String   @id @default(cuid())
+  title      String
+  date       DateTime
+  transcript String?
+  summary    String?
+  decisions  String?
+  leadId     String
+  lead       User     @relation("LeadMeetings", fields: [leadId], references: [id])
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+  tasks      Task[]
+}
+
+model Task {
+  id          String    @id @default(cuid())
+  title       String
+  description String?
+  assigneeId  String
+  assignee    User      @relation("AssignedTasks", fields: [assigneeId], references: [id])
+  creatorId   String
+  creator     User      @relation("CreatedTasks", fields: [creatorId], references: [id])
+  meetingId   String
+  meeting     Meeting   @relation(fields: [meetingId], references: [id], onDelete: Cascade)
+  deadline    DateTime?
+  status      String    @default("pending")
+  priority    String    @default("medium")
+  reminders   Reminder[]
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+}
+
+model Reminder {
+  id        String   @id @default(cuid())
+  taskId    String
+  task      Task     @relation(fields: [taskId], references: [id], onDelete: Cascade)
+  sentAt    DateTime
+  channel   String
+  status    String
+  createdAt DateTime @default(now())
+}
+
+model Settings {
+  id            String   @id @default(cuid())
+  userId        String   @unique
+  user          User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  aiProvider    String   @default("groq")
+  aiApiKey      String?
+  aiBaseUrl     String?
+  aiModel       String?
+  smtpHost      String?
+  smtpPort      String?
+  smtpUser      String?
+  smtpPass      String?
+  appUrl        String?
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+}
