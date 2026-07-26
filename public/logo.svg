@@ -16,13 +16,10 @@
   <circle cx="60" cy="60" r="48" fill="white" opacity="0.15"/>
   
   <!-- M letter -->
-  <path d="M30 82V42C30 38 33 35 37 35H43L55 58L67 35H73C77 35 80 38 80 42V82" 
-        stroke="white" stroke-width="5" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+  <path d="M32 78V42C32 38 35 35 39 35H45L57 58L69 35H75C79 35 82 38 82 42V78" 
+        stroke="white" stroke-width="6" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
   
   <!-- F letter -->
-  <path d="M85 82V42C85 38 88 35 92 35H100" 
-        stroke="white" stroke-width="5" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
-  
-  <!-- AI text -->
-  <text x="60" y="108" text-anchor="middle" font-family="Arial, sans-serif" font-size="14" font-weight="bold" fill="#3B82F6" letter-spacing="4">MEETFLOW</text>
+  <path d="M88 78V42C88 38 91 35 95 35H100" 
+        stroke="white" stroke-width="6" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
 </svg>
