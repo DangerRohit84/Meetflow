@@ -278,7 +278,7 @@ export default function HomePage() {
               <span className="font-bold text-blue-950">MeetFlow AI</span>
             </div>
             <p className="text-sm text-slate-500">
-              Built for INNOVA HACK 2026. Never miss an action item again.
+              Never miss an action item again.
             </p>
           </div>
         </div>
