@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
-    "build": "next build",
+    "build": "prisma generate && next build",
     "start": "next start",
     "lint": "eslint",
     "db:seed": "npx tsx prisma/seed.ts",
@@ -20,6 +20,7 @@
     "lucide-react": "^1.26.0",
     "next": "16.2.11",
     "nodemailer": "^9.0.3",
+    "pptxgenjs": "^4.0.1",
     "prisma": "^5.22.0",
     "react": "19.2.4",
     "react-dom": "19.2.4",

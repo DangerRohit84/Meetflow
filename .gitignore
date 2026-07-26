@@ -46,3 +46,7 @@ next-env.d.ts
 prisma/*.db
 prisma/*.db-wal
 prisma/*.db-shm
+
+# presentation files
+*.pptx
+create-ppt.ts
