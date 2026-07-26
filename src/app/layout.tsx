@@ -12,6 +12,11 @@ export const metadata: Metadata = {
   title: "MeetFlow AI - AI Meeting & Follow-Up Agent",
   description:
     "Never lose track of meeting action items again. AI extracts tasks, assigns owners, and sends automatic reminders.",
+  icons: {
+    icon: "/favicon.svg",
+    shortcut: "/favicon.svg",
+    apple: "/favicon.svg",
+  },
 };
 
 export default function RootLayout({

@@ -66,9 +66,7 @@ export default function HomePage() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex items-center justify-between h-16">
             <Link href="/" className="flex items-center gap-3">
-              <div className="w-10 h-10 gradient-bg rounded-xl flex items-center justify-center shadow-lg shadow-blue-500/30">
-                <Bot className="w-5 h-5 text-white" />
-              </div>
+              <img src="/logo.svg" alt="MeetFlow AI" className="w-10 h-10" />
               <span className="text-xl font-bold text-blue-950">MeetFlow AI</span>
             </Link>
             <div className="flex items-center gap-3">
@@ -564,9 +562,7 @@ export default function HomePage() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex flex-col md:flex-row items-center justify-between gap-4">
             <div className="flex items-center gap-3">
-              <div className="w-8 h-8 gradient-bg rounded-lg flex items-center justify-center">
-                <Bot className="w-4 h-4 text-white" />
-              </div>
+              <img src="/logo.svg" alt="MeetFlow AI" className="w-8 h-8" />
               <span className="font-bold text-blue-950">MeetFlow AI</span>
             </div>
             <p className="text-sm text-slate-500">© 2026 MeetFlow AI. All rights reserved.</p>
