@@ -27,8 +27,6 @@ const providers = [
       { id: 'openai/gpt-oss-120b', name: 'GPT-OSS 120B', free: false },
       { id: 'openai/gpt-oss-20b', name: 'GPT-OSS 20B', free: false },
       { id: 'qwen/qwen3.6-27b', name: 'Qwen 3.6 27B', free: false },
-      { id: 'mixtral-8x7b-32768', name: 'Mixtral 8x7B', free: false },
-      { id: 'gemma2-9b-it', name: 'Gemma 2 9B', free: false },
       { id: 'groq/compound', name: 'Groq Compound', free: false },
       { id: 'groq/compound-mini', name: 'Groq Compound Mini', free: false },
     ],
