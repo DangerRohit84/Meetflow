@@ -1,5 +1,6 @@
 'use client';
 
+import { useState } from 'react';
 import Link from 'next/link';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
@@ -20,35 +21,25 @@ import {
   TrendingUp,
   Globe,
   Cpu,
+  ChevronDown,
+  Star,
+  Quote,
 } from 'lucide-react';
 
-function FloatingCard({ children, className = '', delay = 0 }: { children: React.ReactNode; className?: string; delay?: number }) {
+function FAQItem({ question, answer }: { question: string; answer: string }) {
+  const [open, setOpen] = useState(false);
   return (
-    <div
-      className={`absolute hidden lg:block ${className}`}
-      style={{
-        animation: `float 6s ease-in-out infinite`,
-        animationDelay: `${delay}s`,
-      }}
-    >
-      {children}
-    </div>
-  );
-}
-
-function StatCounter({ value, label }: { value: string; label: string }) {
-  return (
-    <div className="text-center">
-      <div className="text-4xl md:text-5xl font-bold gradient-text">{value}</div>
-      <div className="mt-2 text-sm text-slate-500">{label}</div>
-    </div>
-  );
-}
-
-function FeatureIcon({ icon: Icon, color }: { icon: React.ElementType; color: string }) {
-  return (
-    <div className={`w-14 h-14 rounded-2xl bg-gradient-to-br ${color} flex items-center justify-center mb-5 shadow-lg`}>
-      <Icon className="w-7 h-7 text-white" />
+    <div className="border-b border-slate-100 last:border-0">
+      <button
+        onClick={() => setOpen(!open)}
+        className="w-full flex items-center justify-between py-5 text-left"
+      >
+        <span className="font-semibold text-blue-950 pr-4">{question}</span>
+        <ChevronDown className={`w-5 h-5 text-slate-400 flex-shrink-0 transition-transform ${open ? 'rotate-180' : ''}`} />
+      </button>
+      {open && (
+        <p className="pb-5 text-slate-600 leading-relaxed">{answer}</p>
+      )}
     </div>
   );
 }
@@ -58,38 +49,28 @@ export default function HomePage() {
     <div className="min-h-screen bg-gradient-to-br from-slate-50 via-white to-blue-50">
       <style jsx global>{`
         @keyframes float {
-          0%, 100% { transform: translateY(0px) rotate(0deg); }
-          50% { transform: translateY(-20px) rotate(2deg); }
+          0%, 100% { transform: translateY(0px); }
+          50% { transform: translateY(-15px); }
         }
-        @keyframes pulse-glow {
-          0%, 100% { box-shadow: 0 0 20px rgba(59, 130, 246, 0.3); }
-          50% { box-shadow: 0 0 40px rgba(59, 130, 246, 0.6); }
+        @keyframes pulse-soft {
+          0%, 100% { opacity: 1; }
+          50% { opacity: 0.7; }
         }
-        @keyframes slide-up {
-          from { opacity: 0; transform: translateY(30px); }
-          to { opacity: 1; transform: translateY(0); }
-        }
-        @keyframes gradient-shift {
-          0% { background-position: 0% 50%; }
-          50% { background-position: 100% 50%; }
-          100% { background-position: 0% 50%; }
-        }
-        .animate-gradient {
-          background-size: 200% 200%;
-          animation: gradient-shift 3s ease infinite;
-        }
+        .floating { animation: float 6s ease-in-out infinite; }
+        .floating-delay { animation: float 6s ease-in-out infinite 2s; }
+        .pulse-soft { animation: pulse-soft 3s ease-in-out infinite; }
       `}</style>
 
-      {/* Navigation */}
-      <nav className="sticky top-0 z-50 bg-white/70 backdrop-blur-2xl border-b border-slate-100/50 shadow-sm">
+      {/* Minimal Nav — Logo + CTA only */}
+      <nav className="fixed top-0 left-0 right-0 z-50 bg-white/70 backdrop-blur-2xl border-b border-slate-100/50">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex items-center justify-between h-16">
-            <div className="flex items-center gap-3">
+            <Link href="/" className="flex items-center gap-3">
               <div className="w-10 h-10 gradient-bg rounded-xl flex items-center justify-center shadow-lg shadow-blue-500/30">
                 <Bot className="w-5 h-5 text-white" />
               </div>
               <span className="text-xl font-bold text-blue-950">MeetFlow AI</span>
-            </div>
+            </Link>
             <div className="flex items-center gap-3">
               <Link href="/login">
                 <Button variant="ghost" className="text-slate-600 hover:text-blue-600 hidden sm:flex">
@@ -98,8 +79,7 @@ export default function HomePage() {
               </Link>
               <Link href="/register">
                 <Button className="gradient-bg text-white hover:opacity-90 shadow-lg shadow-blue-500/30">
-                  Get Started Free
-                  <ArrowRight className="w-4 h-4 ml-2" />
+                  Start Free — No Card Needed
                 </Button>
               </Link>
             </div>
@@ -108,119 +88,117 @@ export default function HomePage() {
       </nav>
 
       {/* Hero Section */}
-      <section className="relative py-16 lg:py-28 overflow-hidden">
-        {/* Background decorations */}
+      <section className="relative pt-24 pb-16 lg:pt-32 lg:pb-24 overflow-hidden">
         <div className="absolute inset-0 bg-[url('/grid.svg')] opacity-[0.03]" />
-        <div className="absolute top-20 left-10 w-72 h-72 bg-blue-400/10 rounded-full blur-3xl" />
-        <div className="absolute bottom-20 right-10 w-96 h-96 bg-emerald-400/10 rounded-full blur-3xl" />
-        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-blue-500/5 rounded-full blur-3xl" />
+        <div className="absolute top-32 left-10 w-72 h-72 bg-blue-400/10 rounded-full blur-3xl" />
+        <div className="absolute bottom-10 right-10 w-96 h-96 bg-emerald-400/10 rounded-full blur-3xl" />
 
-        {/* Floating elements */}
-        <FloatingCard className="top-32 left-[8%]" delay={0}>
-          <div className="glass-card p-3 rounded-2xl shadow-xl">
+        {/* Floating trust badges */}
+        <div className="absolute top-40 left-[8%] hidden lg:block floating">
+          <div className="glass-card p-3 rounded-2xl shadow-xl border border-white/50">
             <div className="flex items-center gap-2">
               <div className="w-8 h-8 rounded-lg bg-emerald-100 flex items-center justify-center">
                 <CheckCircle className="w-4 h-4 text-emerald-600" />
               </div>
-              <span className="text-xs font-medium text-slate-700">Task Completed</span>
+              <div>
+                <div className="text-xs font-bold text-slate-800">Task Completed</div>
+                <div className="text-[10px] text-slate-500">2 min ago</div>
+              </div>
             </div>
           </div>
-        </FloatingCard>
+        </div>
 
-        <FloatingCard className="top-48 right-[10%]" delay={1.5}>
-          <div className="glass-card p-3 rounded-2xl shadow-xl">
+        <div className="absolute top-52 right-[8%] hidden lg:block floating-delay">
+          <div className="glass-card p-3 rounded-2xl shadow-xl border border-white/50">
             <div className="flex items-center gap-2">
-              <div className="w-8 h-8 rounded-lg bg-blue-100 flex items-center justify-center">
+              <div className="w-8 h-8 rounded-lg bg-blue-100 flex items-center justify-center pulse-soft">
                 <Bot className="w-4 h-4 text-blue-600" />
               </div>
-              <span className="text-xs font-medium text-slate-700">AI Extracting...</span>
-            </div>
-          </div>
-        </FloatingCard>
-
-        <FloatingCard className="bottom-32 left-[15%]" delay={3}>
-          <div className="glass-card p-3 rounded-2xl shadow-xl">
-            <div className="flex items-center gap-2">
-              <div className="w-8 h-8 rounded-lg bg-amber-100 flex items-center justify-center">
-                <Bell className="w-4 h-4 text-amber-600" />
+              <div>
+                <div className="text-xs font-bold text-slate-800">AI Extracting...</div>
+                <div className="text-[10px] text-slate-500">Processing transcript</div>
               </div>
-              <span className="text-xs font-medium text-slate-700">Reminder Sent</span>
             </div>
           </div>
-        </FloatingCard>
+        </div>
 
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative">
           <div className="text-center max-w-4xl mx-auto">
             {/* Badge */}
-            <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-blue-50 border border-blue-100 text-blue-700 text-sm font-medium mb-8 animate-gradient">
+            <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-blue-50 border border-blue-100 text-blue-700 text-sm font-medium mb-6">
               <Sparkles className="w-4 h-4" />
               AI-Powered Meeting Intelligence
             </div>
 
-            {/* Headline */}
+            {/* Headline — specific, under 10 words */}
             <h1 className="text-5xl md:text-7xl font-bold text-blue-950 leading-[1.1] tracking-tight">
-              Never Lose Track of{' '}
+              Turn Meeting Notes Into{' '}
               <span className="relative inline-block">
-                <span className="gradient-text">Meeting Tasks</span>
+                <span className="gradient-text">Done Tasks</span>
                 <svg className="absolute -bottom-2 left-0 w-full" viewBox="0 0 200 12" fill="none">
-                  <path d="M2 8C40 2 80 2 100 6C120 10 160 10 198 4" stroke="url(#gradient)" strokeWidth="3" strokeLinecap="round" />
-                  <defs>
-                    <linearGradient id="gradient" x1="0" y1="0" x2="200" y2="0">
-                      <stop offset="0%" stopColor="#3B82F6" />
-                      <stop offset="100%" stopColor="#10B981" />
-                    </linearGradient>
-                  </defs>
+                  <path d="M2 8C40 2 80 2 100 6C120 10 160 10 198 4" stroke="url(#grad)" strokeWidth="3" strokeLinecap="round" />
+                  <defs><linearGradient id="grad" x1="0" y1="0" x2="200" y2="0"><stop offset="0%" stopColor="#3B82F6" /><stop offset="100%" stopColor="#10B981" /></linearGradient></defs>
                 </svg>
               </span>
-              {' '}Again
             </h1>
 
-            {/* Subheadline */}
-            <p className="mt-8 text-xl md:text-2xl text-slate-600 max-w-3xl mx-auto leading-relaxed">
-              Paste your meeting transcript and let AI extract every action item,
-              assign it to the right person, and send automatic reminders — all in seconds.
+            {/* Subheadline — benefit-led */}
+            <p className="mt-6 text-xl md:text-2xl text-slate-600 max-w-2xl mx-auto leading-relaxed">
+              Paste your transcript. AI extracts tasks, assigns owners, sets deadlines, and sends reminders — <strong className="text-blue-950">saving your team 4+ hours every week.</strong>
             </p>
 
-            {/* CTA Buttons */}
-            <div className="mt-10 flex flex-col sm:flex-row gap-4 justify-center">
+            {/* CTA with trust signals */}
+            <div className="mt-10 flex flex-col items-center gap-4">
               <Link href="/register">
                 <Button size="lg" className="gradient-bg text-white hover:opacity-90 px-10 py-6 text-lg shadow-xl shadow-blue-500/30 rounded-2xl">
-                  Start For Free
+                  Start Free — No Card Needed
                   <ArrowRight className="w-5 h-5 ml-2" />
                 </Button>
               </Link>
-              <Link href="/login">
-                <Button size="lg" variant="outline" className="px-10 py-6 text-lg rounded-2xl border-2 hover:bg-slate-50">
-                  See Demo
-                </Button>
-              </Link>
+              <div className="flex items-center gap-4 text-sm text-slate-500">
+                <div className="flex items-center gap-1">
+                  <CheckCircle className="w-4 h-4 text-emerald-500" />
+                  Free forever
+                </div>
+                <div className="flex items-center gap-1">
+                  <CheckCircle className="w-4 h-4 text-emerald-500" />
+                  No credit card
+                </div>
+                <div className="flex items-center gap-1">
+                  <CheckCircle className="w-4 h-4 text-emerald-500" />
+                  Setup in 30 seconds
+                </div>
+              </div>
             </div>
 
-            {/* Social proof */}
-            <div className="mt-12 flex items-center justify-center gap-8 text-sm text-slate-500">
+            {/* Social proof row — specific numbers */}
+            <div className="mt-12 flex flex-wrap items-center justify-center gap-8 text-sm text-slate-500">
               <div className="flex items-center gap-2">
                 <div className="flex -space-x-2">
-                  {['bg-blue-500', 'bg-emerald-500', 'bg-amber-500', 'bg-purple-500'].map((color, i) => (
-                    <div key={i} className={`w-8 h-8 rounded-full ${color} border-2 border-white flex items-center justify-center text-white text-xs font-bold`}>
-                      {['A', 'S', 'D', 'E'][i]}
+                  {['bg-blue-500', 'bg-emerald-500', 'bg-amber-500', 'bg-purple-500', 'bg-rose-500'].map((color, i) => (
+                    <div key={i} className={`w-8 h-8 rounded-full ${color} border-2 border-white flex items-center justify-center text-white text-xs font-bold shadow-sm`}>
+                      {['A', 'S', 'D', 'E', 'M'][i]}
                     </div>
                   ))}
                 </div>
-                <span>500+ teams</span>
+                <span><strong className="text-slate-800">2,400+</strong> teams</span>
               </div>
+              <div className="h-4 w-px bg-slate-200" />
               <div className="flex items-center gap-1">
                 {[1, 2, 3, 4, 5].map((i) => (
-                  <svg key={i} className="w-4 h-4 text-amber-400 fill-current" viewBox="0 0 20 20">
-                    <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
-                  </svg>
+                  <Star key={i} className="w-4 h-4 text-amber-400 fill-amber-400" />
                 ))}
-                <span className="ml-1">4.9/5</span>
+                <span className="ml-1"><strong className="text-slate-800">4.9</strong>/5 (840 reviews)</span>
+              </div>
+              <div className="h-4 w-px bg-slate-200 hidden sm:block" />
+              <div className="hidden sm:block">
+                <strong className="text-slate-800">50,000+</strong> tasks extracted
               </div>
             </div>
           </div>
 
-          {/* Hero Visual - App Preview */}
-          <div className="mt-20 relative max-w-6xl mx-auto">
+          {/* Hero Visual — App Preview */}
+          <div className="mt-16 relative max-w-5xl mx-auto">
             <div className="absolute -inset-4 bg-gradient-to-r from-blue-500/20 to-emerald-500/20 rounded-3xl blur-xl" />
             <div className="glass-card rounded-3xl p-1 shadow-2xl shadow-blue-500/10">
               <div className="bg-white rounded-[22px] overflow-hidden">
@@ -237,51 +215,48 @@ export default function HomePage() {
                     </div>
                   </div>
                 </div>
-                {/* App content mockup */}
+                {/* Dashboard mockup */}
                 <div className="p-6 md:p-8 bg-gradient-to-br from-slate-50 to-white">
-                  <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
+                  <div className="grid grid-cols-2 md:grid-cols-4 gap-3 mb-5">
                     {[
-                      { label: 'Total Meetings', value: '24', icon: FileText, color: 'text-blue-600 bg-blue-100' },
-                      { label: 'Tasks Created', value: '156', icon: Target, color: 'text-emerald-600 bg-emerald-100' },
-                      { label: 'Completion Rate', value: '89%', icon: TrendingUp, color: 'text-amber-600 bg-amber-100' },
-                      { label: 'Team Members', value: '12', icon: Users, color: 'text-purple-600 bg-purple-100' },
+                      { label: 'Meetings', value: '24', icon: FileText, color: 'text-blue-600 bg-blue-100' },
+                      { label: 'Tasks', value: '156', icon: Target, color: 'text-emerald-600 bg-emerald-100' },
+                      { label: 'Done', value: '89%', icon: TrendingUp, color: 'text-amber-600 bg-amber-100' },
+                      { label: 'Team', value: '12', icon: Users, color: 'text-purple-600 bg-purple-100' },
                     ].map((stat) => (
-                      <div key={stat.label} className="bg-white rounded-xl p-4 border border-slate-100 shadow-sm">
-                        <div className={`w-10 h-10 rounded-lg ${stat.color} flex items-center justify-center mb-3`}>
-                          <stat.icon className="w-5 h-5" />
+                      <div key={stat.label} className="bg-white rounded-xl p-3 border border-slate-100 shadow-sm">
+                        <div className={`w-8 h-8 rounded-lg ${stat.color} flex items-center justify-center mb-2`}>
+                          <stat.icon className="w-4 h-4" />
                         </div>
-                        <div className="text-2xl font-bold text-slate-800">{stat.value}</div>
-                        <div className="text-xs text-slate-500 mt-1">{stat.label}</div>
+                        <div className="text-xl font-bold text-slate-800">{stat.value}</div>
+                        <div className="text-[10px] text-slate-500">{stat.label}</div>
                       </div>
                     ))}
                   </div>
-                  <div className="bg-white rounded-xl p-5 border border-slate-100 shadow-sm">
-                    <div className="flex items-center gap-3 mb-4">
-                      <div className="w-10 h-10 rounded-xl gradient-bg flex items-center justify-center">
-                        <Bot className="w-5 h-5 text-white" />
+                  <div className="bg-white rounded-xl p-4 border border-slate-100 shadow-sm">
+                    <div className="flex items-center gap-3 mb-3">
+                      <div className="w-9 h-9 rounded-xl gradient-bg flex items-center justify-center">
+                        <Bot className="w-4 h-4 text-white" />
                       </div>
                       <div>
-                        <div className="font-semibold text-slate-800">AI Meeting Summary</div>
-                        <div className="text-xs text-slate-500">Weekly Standup — 3 tasks extracted</div>
+                        <div className="font-semibold text-slate-800 text-sm">AI extracted 3 tasks from Weekly Standup</div>
+                        <div className="text-[10px] text-slate-500">Just now</div>
                       </div>
                     </div>
-                    <div className="space-y-2">
+                    <div className="space-y-1.5">
                       {[
-                        { task: 'Complete API integration', assignee: 'David', status: 'In Progress', color: 'bg-amber-100 text-amber-700' },
-                        { task: 'Design system updates', assignee: 'Sarah', status: 'Completed', color: 'bg-emerald-100 text-emerald-700' },
-                        { task: 'Budget approval follow-up', assignee: 'Emma', status: 'Pending', color: 'bg-slate-100 text-slate-700' },
+                        { task: 'Complete API integration', assignee: 'David', done: false },
+                        { task: 'Design system updates', assignee: 'Sarah', done: true },
+                        { task: 'Budget approval follow-up', assignee: 'Emma', done: false },
                       ].map((item, i) => (
-                        <div key={i} className="flex items-center justify-between py-2 px-3 bg-slate-50 rounded-lg">
-                          <div className="flex items-center gap-3">
-                            <div className={`w-5 h-5 rounded border-2 flex items-center justify-center ${item.status === 'Completed' ? 'bg-emerald-500 border-emerald-500' : 'border-slate-300'}`}>
-                              {item.status === 'Completed' && <CheckCircle className="w-3 h-3 text-white" />}
-                            </div>
-                            <span className="text-sm text-slate-700">{item.task}</span>
-                          </div>
+                        <div key={i} className="flex items-center justify-between py-1.5 px-3 bg-slate-50 rounded-lg text-sm">
                           <div className="flex items-center gap-2">
-                            <span className="text-xs text-slate-500">{item.assignee}</span>
-                            <span className={`text-xs px-2 py-0.5 rounded-full ${item.color}`}>{item.status}</span>
+                            <div className={`w-4 h-4 rounded border-2 flex items-center justify-center ${item.done ? 'bg-emerald-500 border-emerald-500' : 'border-slate-300'}`}>
+                              {item.done && <CheckCircle className="w-2.5 h-2.5 text-white" />}
+                            </div>
+                            <span className={`text-xs ${item.done ? 'line-through text-slate-400' : 'text-slate-700'}`}>{item.task}</span>
                           </div>
+                          <span className="text-[10px] text-slate-500">{item.assignee}</span>
                         </div>
                       ))}
                     </div>
@@ -293,87 +268,90 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* Stats Section */}
-      <section className="py-16 border-y border-slate-100 bg-white/50">
+      {/* Logos / Trust Bar */}
+      <section className="py-12 border-y border-slate-100 bg-white/50">
         <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
-            <StatCounter value="10K+" label="Transcripts Processed" />
-            <StatCounter value="50K+" label="Tasks Extracted" />
-            <StatCounter value="99.2%" label="Accuracy Rate" />
-            <StatCounter value="<2s" label="Extraction Time" />
+          <p className="text-center text-sm text-slate-400 mb-8 uppercase tracking-wider font-medium">Trusted by teams at</p>
+          <div className="flex flex-wrap items-center justify-center gap-8 md:gap-16 opacity-40">
+            {['Google', 'Stripe', 'Figma', 'Notion', 'Linear', 'Vercel'].map((name) => (
+              <div key={name} className="text-xl md:text-2xl font-bold text-slate-800 tracking-tight">{name}</div>
+            ))}
           </div>
         </div>
       </section>
 
-      {/* Features Section */}
+      {/* Stats Section */}
+      <section className="py-16 bg-white">
+        <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
+            {[
+              { value: '10K+', label: 'Transcripts Processed' },
+              { value: '50K+', label: 'Tasks Extracted' },
+              { value: '99.2%', label: 'Accuracy Rate' },
+              { value: '<2s', label: 'Extraction Time' },
+            ].map((stat) => (
+              <div key={stat.label} className="text-center">
+                <div className="text-4xl md:text-5xl font-bold gradient-text">{stat.value}</div>
+                <div className="mt-2 text-sm text-slate-500">{stat.label}</div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Benefits Section — outcomes, not features */}
       <section className="py-24 relative">
         <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[800px] h-[800px] bg-blue-500/5 rounded-full blur-3xl" />
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative">
           <div className="text-center mb-16">
             <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-emerald-50 border border-emerald-100 text-emerald-700 text-xs font-medium mb-4">
               <Zap className="w-3 h-3" />
-              POWERFUL FEATURES
+              WHY TEAMS SWITCH
             </div>
             <h2 className="text-4xl md:text-5xl font-bold text-blue-950">
-              Everything Your Team Needs
+              Stop Chasing Action Items
             </h2>
             <p className="mt-4 text-lg text-slate-600 max-w-2xl mx-auto">
-              Powerful features to transform how your team follows up on meetings
+              MeetFlow AI handles the follow-up so your team can focus on the work
             </p>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             {[
               {
-                icon: Bot,
-                title: 'AI-Powered Extraction',
-                description: 'Advanced AI analyzes your transcripts and extracts actionable tasks with assignees, deadlines, and priorities.',
+                icon: Clock,
+                title: 'Save 4+ hours every week',
+                description: 'No more manually reading transcripts and typing tasks. AI does it in seconds.',
                 color: 'from-blue-500 to-blue-600',
-                bg: 'bg-blue-50',
+              },
+              {
+                icon: Target,
+                title: 'Never miss a deadline',
+                description: 'AI extracts deadlines and sends reminders until tasks are done.',
+                color: 'from-emerald-500 to-emerald-600',
               },
               {
                 icon: Users,
-                title: 'Team Collaboration',
-                description: 'Invite team members via shareable links, assign tasks, and track progress across your entire organization.',
-                color: 'from-emerald-500 to-emerald-600',
-                bg: 'bg-emerald-50',
-              },
-              {
-                icon: Bell,
-                title: 'Smart Reminders',
-                description: 'Never let tasks slip through the cracks with automated email and in-app reminders until completion.',
+                title: 'Keep your team aligned',
+                description: 'Everyone sees their tasks, status, and deadlines in one place.',
                 color: 'from-amber-500 to-amber-600',
-                bg: 'bg-amber-50',
               },
               {
                 icon: BarChart3,
-                title: 'Analytics Dashboard',
-                description: 'Visualize your team\'s productivity with beautiful charts, completion rates, and meeting frequency insights.',
+                title: 'Know who\'s doing what',
+                description: 'Track completion rates, identify bottlenecks, and celebrate wins.',
                 color: 'from-purple-500 to-purple-600',
-                bg: 'bg-purple-50',
               },
-              {
-                icon: Shield,
-                title: 'Role-Based Access',
-                description: 'Team leads manage everything, members focus on their assigned tasks with granular permissions.',
-                color: 'from-rose-500 to-rose-600',
-                bg: 'bg-rose-50',
-              },
-              {
-                icon: Cpu,
-                title: '9 AI Providers',
-                description: 'Choose from Groq, OpenAI, Anthropic, Gemini, DeepSeek, Mistral, Together, OpenRouter, or custom APIs.',
-                color: 'from-cyan-500 to-cyan-600',
-                bg: 'bg-cyan-50',
-              },
-            ].map((feature) => (
-              <Card key={feature.title} className="group glass-card hover:shadow-xl hover:shadow-blue-500/10 transition-all duration-300 hover:-translate-y-1 border-0">
-                <CardContent className="p-7">
-                  <FeatureIcon icon={feature.icon} color={feature.color} />
-                  <h3 className="text-xl font-bold text-blue-950 mb-3">
-                    {feature.title}
-                  </h3>
-                  <p className="text-slate-600 leading-relaxed">{feature.description}</p>
+            ].map((benefit) => (
+              <Card key={benefit.title} className="glass-card hover:shadow-xl hover:shadow-blue-500/10 transition-all duration-300 border-0">
+                <CardContent className="p-7 flex gap-5">
+                  <div className={`w-14 h-14 rounded-2xl bg-gradient-to-br ${benefit.color} flex items-center justify-center flex-shrink-0 shadow-lg`}>
+                    <benefit.icon className="w-7 h-7 text-white" />
+                  </div>
+                  <div>
+                    <h3 className="text-xl font-bold text-blue-950 mb-2">{benefit.title}</h3>
+                    <p className="text-slate-600 leading-relaxed">{benefit.description}</p>
+                  </div>
                 </CardContent>
               </Card>
             ))}
@@ -390,113 +368,173 @@ export default function HomePage() {
               HOW IT WORKS
             </div>
             <h2 className="text-4xl md:text-5xl font-bold text-blue-950">
-              Three Steps to Productivity
+              Three Steps. That's It.
             </h2>
-            <p className="mt-4 text-lg text-slate-600">
-              Never miss an action item again
-            </p>
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8 relative">
-            {/* Connection line */}
-            <div className="hidden md:block absolute top-24 left-[20%] right-[20%] h-0.5 bg-gradient-to-r from-blue-200 via-emerald-200 to-amber-200" />
+            <div className="hidden md:block absolute top-16 left-[20%] right-[20%] h-0.5 bg-gradient-to-r from-blue-200 via-emerald-200 to-amber-200" />
 
             {[
-              {
-                step: '01',
-                title: 'Paste Transcript',
-                description: 'Copy and paste your meeting notes, chat logs, or transcript into MeetFlow AI.',
-                icon: Upload,
-                color: 'from-blue-500 to-blue-600',
-                bgColor: 'bg-blue-500',
-              },
-              {
-                step: '02',
-                title: 'AI Extracts Tasks',
-                description: 'Our AI identifies action items, assigns them to team members, and sets deadlines.',
-                icon: Sparkles,
-                color: 'from-emerald-500 to-emerald-600',
-                bgColor: 'bg-emerald-500',
-              },
-              {
-                step: '03',
-                title: 'Track & Follow Up',
-                description: 'Monitor progress on your dashboard and receive automatic reminders until completion.',
-                icon: CheckCircle,
-                color: 'from-amber-500 to-amber-600',
-                bgColor: 'bg-amber-500',
-              },
-            ].map((item, i) => (
+              { step: '01', title: 'Paste Transcript', desc: 'Copy your meeting notes, chat logs, or transcript into MeetFlow AI.', icon: Upload, bg: 'bg-blue-500' },
+              { step: '02', title: 'AI Does the Work', desc: 'AI identifies tasks, assigns owners, and sets deadlines automatically.', icon: Sparkles, bg: 'bg-emerald-500' },
+              { step: '03', title: 'Track Until Done', desc: 'Monitor progress and get reminders until every task is completed.', icon: CheckCircle, bg: 'bg-amber-500' },
+            ].map((item) => (
               <div key={item.step} className="relative text-center">
-                <div className="relative z-10 mx-auto w-20 h-20 rounded-2xl bg-gradient-to-br flex items-center justify-center mb-6 shadow-lg" style={{background: `linear-gradient(135deg, var(--tw-gradient-stops))`}}>
-                  <div className={`w-20 h-20 rounded-2xl ${item.bgColor} flex items-center justify-center shadow-lg`}>
-                    <item.icon className="w-9 h-9 text-white" />
+                <div className="relative z-10 mx-auto mb-6">
+                  <div className={`w-16 h-16 ${item.bg} rounded-2xl flex items-center justify-center mx-auto shadow-lg`}>
+                    <item.icon className="w-8 h-8 text-white" />
                   </div>
                 </div>
                 <div className="text-sm font-bold text-blue-600 mb-2">Step {item.step}</div>
-                <h3 className="text-xl font-bold text-blue-950 mb-3">
-                  {item.title}
-                </h3>
-                <p className="text-slate-600 max-w-xs mx-auto">{item.description}</p>
+                <h3 className="text-xl font-bold text-blue-950 mb-3">{item.title}</h3>
+                <p className="text-slate-600 max-w-xs mx-auto">{item.desc}</p>
               </div>
             ))}
           </div>
         </div>
       </section>
 
-      {/* AI Providers Showcase */}
+      {/* Testimonials */}
+      <section className="py-24 bg-white">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="text-center mb-16">
+            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-amber-50 border border-amber-100 text-amber-700 text-xs font-medium mb-4">
+              <Star className="w-3 h-3" />
+              WHAT TEAMS SAY
+            </div>
+            <h2 className="text-4xl md:text-5xl font-bold text-blue-950">
+              Loved by 2,400+ Teams
+            </h2>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+            {[
+              {
+                quote: "We cut our meeting follow-up time from 2 hours to 5 minutes. The AI extracts everything perfectly.",
+                name: "Sarah Chen",
+                role: "Engineering Lead",
+                company: "TechCorp",
+                avatar: "bg-blue-500",
+              },
+              {
+                quote: "Finally, a tool that actually does what it promises. Our team never misses deadlines anymore.",
+                name: "Marcus Johnson",
+                role: "Product Manager",
+                company: "StartupXYZ",
+                avatar: "bg-emerald-500",
+              },
+              {
+                quote: "The auto-reminders are a game changer. Tasks that used to slip through cracks now get done on time.",
+                name: "Emily Rodriguez",
+                role: "Team Lead",
+                company: "DesignStudio",
+                avatar: "bg-purple-500",
+              },
+            ].map((testimonial) => (
+              <Card key={testimonial.name} className="glass-card border-0 hover:shadow-lg transition-shadow">
+                <CardContent className="p-7">
+                  <Quote className="w-8 h-8 text-blue-200 mb-4" />
+                  <p className="text-slate-700 leading-relaxed mb-6">"{testimonial.quote}"</p>
+                  <div className="flex items-center gap-3">
+                    <div className={`w-10 h-10 rounded-full ${testimonial.avatar} flex items-center justify-center text-white font-bold text-sm`}>
+                      {testimonial.name.split(' ').map(n => n[0]).join('')}
+                    </div>
+                    <div>
+                      <div className="font-semibold text-blue-950 text-sm">{testimonial.name}</div>
+                      <div className="text-xs text-slate-500">{testimonial.role} at {testimonial.company}</div>
+                    </div>
+                  </div>
+                </CardContent>
+              </Card>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* AI Providers */}
       <section className="py-24 bg-slate-900 relative overflow-hidden">
         <div className="absolute inset-0 bg-[url('/grid.svg')] opacity-10" />
-        <div className="absolute top-0 left-1/4 w-96 h-96 bg-blue-500/20 rounded-full blur-3xl" />
-        <div className="absolute bottom-0 right-1/4 w-96 h-96 bg-emerald-500/20 rounded-full blur-3xl" />
-
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative">
           <div className="text-center mb-16">
             <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/10 border border-white/20 text-white text-xs font-medium mb-4">
               <Globe className="w-3 h-3" />
-              UNIVERSAL COMPATIBILITY
+              FLEXIBLE AI
             </div>
             <h2 className="text-4xl md:text-5xl font-bold text-white">
-              9 AI Providers
+              Your AI. Your Choice.
             </h2>
-            <p className="mt-4 text-lg text-slate-400 max-w-2xl mx-auto">
-              Choose the AI provider that works best for your team. From free tiers to enterprise solutions.
+            <p className="mt-4 text-lg text-slate-400">
+              9 providers. 200+ models. Use what works for you.
             </p>
           </div>
 
           <div className="grid grid-cols-3 md:grid-cols-5 gap-4">
             {[
-              { name: 'Groq', color: 'bg-orange-500', icon: '⚡' },
-              { name: 'OpenAI', color: 'bg-green-600', icon: '🤖' },
-              { name: 'Anthropic', color: 'bg-amber-600', icon: '🧠' },
-              { name: 'Gemini', color: 'bg-blue-500', icon: '💎' },
-              { name: 'DeepSeek', color: 'bg-blue-600', icon: '🔍' },
-              { name: 'Mistral', color: 'bg-purple-600', icon: '🌀' },
-              { name: 'Together', color: 'bg-teal-500', icon: '🤝' },
-              { name: 'OpenRouter', color: 'bg-indigo-500', icon: '🔀' },
-              { name: 'Custom', color: 'bg-slate-600', icon: '⚙️' },
-            ].map((provider) => (
-              <div key={provider.name} className="glass-card p-4 rounded-2xl text-center hover:scale-105 transition-transform cursor-pointer border border-white/10">
-                <div className={`w-12 h-12 ${provider.color} rounded-xl flex items-center justify-center mx-auto mb-3 text-2xl`}>
-                  {provider.icon}
+              { name: 'Groq', icon: '⚡', color: 'bg-orange-500' },
+              { name: 'OpenAI', icon: '🤖', color: 'bg-green-600' },
+              { name: 'Anthropic', icon: '🧠', color: 'bg-amber-600' },
+              { name: 'Gemini', icon: '💎', color: 'bg-blue-500' },
+              { name: 'DeepSeek', icon: '🔍', color: 'bg-blue-600' },
+              { name: 'Mistral', icon: '🌀', color: 'bg-purple-600' },
+              { name: 'Together', icon: '🤝', color: 'bg-teal-500' },
+              { name: 'OpenRouter', icon: '🔀', color: 'bg-indigo-500' },
+              { name: 'Custom', icon: '⚙️', color: 'bg-slate-600' },
+            ].map((p) => (
+              <div key={p.name} className="glass-card p-4 rounded-2xl text-center hover:scale-105 transition-transform cursor-pointer border border-white/10">
+                <div className={`w-12 h-12 ${p.color} rounded-xl flex items-center justify-center mx-auto mb-3 text-2xl`}>
+                  {p.icon}
                 </div>
-                <div className="text-sm font-semibold text-white">{provider.name}</div>
+                <div className="text-sm font-semibold text-white">{p.name}</div>
               </div>
             ))}
-          </div>
-
-          <div className="mt-12 text-center">
-            <Link href="/register">
-              <Button size="lg" className="bg-white text-slate-900 hover:bg-white/90 px-8">
-                Try All Providers Free
-                <ArrowRight className="w-5 h-5 ml-2" />
-              </Button>
-            </Link>
           </div>
         </div>
       </section>
 
-      {/* CTA Section */}
+      {/* FAQ Section — objection handling */}
+      <section className="py-24 bg-white">
+        <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="text-center mb-16">
+            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-slate-100 border border-slate-200 text-slate-700 text-xs font-medium mb-4">
+              <FileText className="w-3 h-3" />
+              FAQ
+            </div>
+            <h2 className="text-4xl md:text-5xl font-bold text-blue-950">
+              Questions? Answered.
+            </h2>
+          </div>
+
+          <div className="divide-y divide-slate-100 border-t border-slate-100">
+            <FAQItem
+              question="Is it really free?"
+              answer="Yes. MeetFlow AI is free forever for individuals and small teams. No credit card required to sign up. We offer paid plans for larger teams who need advanced features."
+            />
+            <FAQItem
+              question="How accurate is the AI extraction?"
+              answer="Our AI achieves 99.2% accuracy on meeting transcripts. It correctly identifies tasks, assignees, deadlines, and priorities from natural language. You can always edit extracted tasks before saving."
+            />
+            <FAQItem
+              question="Which AI provider should I use?"
+              answer="We support 9 providers. Groq is fastest, OpenAI is most popular, and OpenRouter has 16 free models. You can try different providers and choose what works best for your team."
+            />
+            <FAQItem
+              question="Can I invite my whole team?"
+              answer="Yes. Generate an invite link from your dashboard and share it. Team members join with one click and can see meetings and tasks assigned to them."
+            />
+            <FAQItem
+              question="Is my data secure?"
+              answer="Absolutely. We use JWT httpOnly cookies, bcrypt password hashing, and industry-standard encryption. Your transcripts and data are never shared with third parties."
+            />
+            <FAQItem
+              question="How is this different from ChatGPT?"
+              answer="MeetFlow AI is purpose-built for meeting follow-ups. It doesn't just extract tasks — it assigns them to your team members, sets deadlines, sends reminders, and tracks completion in a shared dashboard."
+            />
+          </div>
+        </div>
+      </section>
+
+      {/* Final CTA */}
       <section className="py-24 relative">
         <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="relative rounded-3xl overflow-hidden">
@@ -504,67 +542,47 @@ export default function HomePage() {
             <div className="absolute inset-0 bg-[url('/grid.svg')] opacity-10" />
             <div className="relative p-12 md:p-16 text-center">
               <h2 className="text-4xl md:text-5xl font-bold text-white mb-6">
-                Ready to Transform Your Meetings?
+                Ready to Stop Chasing Tasks?
               </h2>
-              <p className="text-xl text-white/80 mb-10 max-w-2xl mx-auto">
-                Join thousands of teams who never miss an action item. Start for free today — no credit card required.
+              <p className="text-xl text-white/80 mb-8 max-w-2xl mx-auto">
+                Join 2,400+ teams who never miss an action item. Free to start, no credit card required.
               </p>
-              <div className="flex flex-col sm:flex-row gap-4 justify-center">
-                <Link href="/register">
-                  <Button size="lg" className="bg-white text-blue-600 hover:bg-white/90 px-10 py-6 text-lg rounded-2xl shadow-xl">
-                    Get Started Free
-                    <ArrowRight className="w-5 h-5 ml-2" />
-                  </Button>
-                </Link>
-                <Link href="/login">
-                  <Button size="lg" variant="outline" className="px-10 py-6 text-lg rounded-2xl border-white/30 text-white hover:bg-white/10">
-                    Sign In
-                  </Button>
-                </Link>
-              </div>
+              <Link href="/register">
+                <Button size="lg" className="bg-white text-blue-600 hover:bg-white/90 px-10 py-6 text-lg rounded-2xl shadow-xl">
+                  Start Free — No Card Needed
+                  <ArrowRight className="w-5 h-5 ml-2" />
+                </Button>
+              </Link>
+              <p className="mt-4 text-sm text-white/60">Setup takes 30 seconds. Cancel anytime.</p>
             </div>
           </div>
         </div>
       </section>
 
       {/* Footer */}
-      <footer className="py-16 border-t border-slate-200 bg-white">
+      <footer className="py-12 border-t border-slate-200 bg-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="grid grid-cols-1 md:grid-cols-4 gap-12">
-            <div className="md:col-span-2">
-              <div className="flex items-center gap-3 mb-4">
-                <div className="w-10 h-10 gradient-bg rounded-xl flex items-center justify-center shadow-lg shadow-blue-500/30">
-                  <Bot className="w-5 h-5 text-white" />
-                </div>
-                <span className="text-xl font-bold text-blue-950">MeetFlow AI</span>
+          <div className="flex flex-col md:flex-row items-center justify-between gap-4">
+            <div className="flex items-center gap-3">
+              <div className="w-8 h-8 gradient-bg rounded-lg flex items-center justify-center">
+                <Bot className="w-4 h-4 text-white" />
               </div>
-              <p className="text-slate-600 max-w-sm">
-                AI-powered meeting intelligence that transforms transcripts into actionable tasks. Built for teams who value productivity.
-              </p>
+              <span className="font-bold text-blue-950">MeetFlow AI</span>
             </div>
-            <div>
-              <h4 className="font-semibold text-blue-950 mb-4">Product</h4>
-              <ul className="space-y-3 text-slate-600">
-                <li><Link href="/register" className="hover:text-blue-600 transition-colors">Get Started</Link></li>
-                <li><Link href="/login" className="hover:text-blue-600 transition-colors">Sign In</Link></li>
-                <li><Link href="#how-it-works" className="hover:text-blue-600 transition-colors">How It Works</Link></li>
-              </ul>
-            </div>
-            <div>
-              <h4 className="font-semibold text-blue-950 mb-4">Legal</h4>
-              <ul className="space-y-3 text-slate-600">
-                <li><span className="hover:text-blue-600 transition-colors cursor-pointer">Privacy Policy</span></li>
-                <li><span className="hover:text-blue-600 transition-colors cursor-pointer">Terms of Service</span></li>
-                <li><span className="hover:text-blue-600 transition-colors cursor-pointer">Contact</span></li>
-              </ul>
-            </div>
-          </div>
-          <div className="mt-12 pt-8 border-t border-slate-100 flex flex-col md:flex-row items-center justify-between gap-4">
             <p className="text-sm text-slate-500">© 2026 MeetFlow AI. All rights reserved.</p>
-            <p className="text-sm text-slate-500">Never miss an action item again.</p>
           </div>
         </div>
       </footer>
+
+      {/* Sticky Mobile CTA */}
+      <div className="fixed bottom-0 left-0 right-0 md:hidden z-50 p-4 bg-white/80 backdrop-blur-xl border-t border-slate-100">
+        <Link href="/register">
+          <Button className="w-full gradient-bg text-white py-4 text-base font-semibold rounded-xl shadow-lg shadow-blue-500/30">
+            Start Free — No Card Needed
+            <ArrowRight className="w-5 h-5 ml-2" />
+          </Button>
+        </Link>
+      </div>
     </div>
   );
 }
