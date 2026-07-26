@@ -12,7 +12,7 @@
 
 **Transform meeting transcripts into actionable tasks in seconds — powered by 9 AI providers.**
 
-[Live Demo](https://meetflow-ai.vercel.app) · [Report Bug](https://github.com/DangerRohit84/Meetflow/issues) · [Request Feature](https://github.com/DangerRohit84/Meetflow/issues)
+[Live Demo](https://meetflow-flame.vercel.app) · [Report Bug](https://github.com/DangerRohit84/Meetflow/issues) · [Request Feature](https://github.com/DangerRohit84/Meetflow/issues)
 
 </div>
 
